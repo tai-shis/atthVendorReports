@@ -5,16 +5,26 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-     "build": "tsc --build",
-     "start": "node ./dist/index.js",
-     "dev": "nodemon ./src/index.ts"
+    "build": "tsc --build",
+    "start": "node ./dist/index.js",
+    "dev": "nodemon --exec node --loader ts-node/esm ./src/index.ts",
+    "dbstart": "docker start postgres_test",
+    "dbstop": "docker stop postgres_test",
+    "dblog": "docker logs -f postgres_test",
+    "dbenter": "psql -h localhost -p 5432 -U postgres -d postgres"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
+    "square": "^43.1.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/node": "^24.7.0",
+    "@types/pg": "^8.15.5",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"

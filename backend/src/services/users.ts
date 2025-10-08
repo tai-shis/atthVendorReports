@@ -1,11 +1,11 @@
-import query from '../models/database.js';
+import queryDB from '../models/database.js';
 
-import type User from '../models/userModel.js';
+import type { User } from '../models/user.js';
 import type { Result } from 'pg';
 
 function getUser(vendorName: string): Promise<User | undefined> {
   // Should only ever get one user back, as vendors can only register once.
-  return query(
+  return queryDB(
     'SELECT * FROM users WHERE vendorName=$1',[vendorName])
     .then((res: Result) => {
       if (res.rowCount === 0){

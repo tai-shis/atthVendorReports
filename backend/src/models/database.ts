@@ -10,6 +10,6 @@ const pool = new Pool({
 });
 
 
-export default async function query(text: string, params?: any[]): Promise<Result> {
+export default async function queryDB(text: string, params?: any[]): Promise<Result> {
   return await pool.query(text, params);
 }
