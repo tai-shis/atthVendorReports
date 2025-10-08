@@ -1,21 +1,22 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "index.js",
   "license": "MIT",
+  "type": "module",
+  "scripts": {
+     "build": "tsc --build",
+     "start": "node ./dist/index.js",
+     "dev": "nodemon ./src/index.ts"
+  },
   "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
     "@types/express": "^5.0.3",
     "@types/node": "^24.7.0",
-    "bcrypt": "^6.0.0",
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "pg": "^8.16.3",
-    "square": "^43.1.0",
+    "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
-  },
-  "scripts": {
-    "start": "node server",
-    "dev": "nodemon server"
   }
 }

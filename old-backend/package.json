@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.7.0",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "pg": "^8.16.3",
+    "square": "^43.1.0"
+  },
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon --exec ts-node server",
+    "dbstart": "docker start postgres_test",
+    "dbstop": "docker stop postgres_test",
+    "dblog": "docker logs -f postgres_test",
+    "dbenter": "psql -h localhost -p 5432 -U postgres -d postgres"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/pg": "^8.15.5",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
