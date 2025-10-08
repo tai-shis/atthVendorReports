@@ -15,10 +15,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-app.use('/api/auth', authRouter);
+app.use('/auth', authRouter);
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("I finally fucking got it to work");
+app.get("/", (req: Request, res: Response) => { 
+  res.send(`I finally fucking got it to work`);
 });
 
 app.listen(PORT, () => {

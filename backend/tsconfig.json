@@ -9,7 +9,7 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "strict": true,
-    "strictNullChecks": true,
+    // "strictNullChecks": true,
     "strictFunctionTypes": true,
   },
   "include": ["src/**/*.ts"],
