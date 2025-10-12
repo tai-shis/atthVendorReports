@@ -5,7 +5,7 @@ import {
   checkPassword, 
   getUser 
 } from '../services/users.js';
-import { createToken } from '../services/token.js'
+import { createToken } from '../services/tokens.js'
 
 import { genSaltSync, hashSync } from 'bcrypt';
 
@@ -115,7 +115,7 @@ export async function login(req: Request, res: Response) {
     // if we get to here, we now give user a valid session
     // first, lets fetch the vendor name
     const vendorName: string = await getUser(email);
-    const authToken: string = await createToken(email, vendorName);
+    const authToken: string = createToken(email, vendorName);
 
     // boom, we all good baby
     return res.status(200).json({ 
@@ -128,6 +128,4 @@ export async function login(req: Request, res: Response) {
     console.log(`Error duing login: ${err.message}`)
     return res.status(503).json({ error: 'Internal Server Error', code: 'database'})
   }
-  
-
 }
