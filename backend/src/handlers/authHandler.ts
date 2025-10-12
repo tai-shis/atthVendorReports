@@ -69,7 +69,7 @@ export async function register(req: Request, res: Response) {
 
     // TODO remove salt from store
     await insertUser(email, hash, salt, vendorName);
-    return res.status(201).json({
+    return res.status(200).json({
       message: 'User registered successfully',
       user: { email, vendorName },
       code: 'success'
