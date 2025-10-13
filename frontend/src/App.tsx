@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router'
-import { AuthProvider, ProtectedRoutes } from './providers/authProvider'
+import { AuthProvider, ProtectedRoutes } from './providers/AuthProvider'
 import UnprotectedRoutes from './pages/UnprotectedRoutes'
 
 // pages

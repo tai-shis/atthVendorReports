@@ -57,3 +57,12 @@ export async function getUser(email: string): Promise<string> {
     throw new Error(`Database error when fetching user ${err.message}`);
   }
 }
+
+export async function getUsers(): Promise<string[]> {
+  try {
+    const res = await queryDB('SELECT * FROM users');
+    return res.rows;
+  } catch(err: any) {
+    throw new Error(`Database error when fetching users ${err.message}`);
+  }
+}

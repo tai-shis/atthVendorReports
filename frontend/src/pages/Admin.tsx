@@ -9,7 +9,7 @@ export default function Admin() {
     <div className='h-dvh py-16 flex flex-col items-center'>
       {isAdmin 
       ?
-        <div className='text-2xl font-light'>Welcome, Admin!</div>
+        <div className='text-2xl font-light'>Admin dashboard placeholder</div>
       :
         <AdminLogin setIsAdmin={setIsAdmin}/>
       }
