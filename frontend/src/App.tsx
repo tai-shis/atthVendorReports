@@ -3,16 +3,23 @@ import { AuthProvider, ProtectedRoutes } from './providers/authProvider'
 
 // pages
 import Home from './pages/Home'
+import UnprotectedRoutes from './pages/UnprotectedRoutes'
+import NoPage from './pages/NoPage'
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          <Route path='/' element={<Home />} />
-          <Route element={<ProtectedRoutes/>}>
-          
+          <Route element={<UnprotectedRoutes/>}>
+            <Route path='/' element={<Home />} />
+            {/* <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} /> */}
           </Route>
+          <Route path='/dashboard' element={<ProtectedRoutes/>}>
+            {/* <Route path='/dashboard' element={<Dashboard />} /> */}
+          </Route>
+          <Route path='*' element={<NoPage/>} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
