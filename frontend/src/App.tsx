@@ -5,6 +5,7 @@ import UnprotectedRoutes from './pages/UnprotectedRoutes'
 // pages
 import Home from './pages/Home'
 import Login from './pages/Login'
+import Register from './pages/Register'
 import NoPage from './pages/NoPage'
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
           <Route element={<UnprotectedRoutes/>}>
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
-            {/* <Route path='/register' element={<Register />} /> */}
+            <Route path='/register' element={<Register />} />
           </Route>
           <Route path='/dashboard' element={<ProtectedRoutes/>}>
             {/* <Route path='/dashboard' element={<Dashboard />} /> */}
