@@ -32,35 +32,35 @@ export async function register(req: Request, res: Response) {
 
   // Ensure that all parameters exist blah blah blah
   if(!email) {
-    return res.status(400).json({ error: 'Email is required', code: 'emailMissing' });
+    return res.status(400).json({ error: 'Email is required'});
   }
 
   // Catch injection/invalid
   if(!validateEmail(email)) {
-    return res.status(400).json({ error: 'Email contains invalid characters', code: 'emailInvalid' })
+    return res.status(400).json({ error: 'Email contains invalid characters' })
   }
   
   if(!password) {
-    return res.status(400).json({ error: 'Password is required', code: 'passwordMissing' });  
+    return res.status(400).json({ error: 'Password is required'});  
   }
   
   if(password.length <= 4) {
-    return res.status(400).json({ error: 'Password length is too short', code: 'passwordTooShort' })
+    return res.status(400).json({ error: 'Password length is too short'})
   } 
   
   if(!vendorName) {
-    return res.status(400).json({ error: 'Vendor name is required', code: 'vendorNameMissing' });
+    return res.status(400).json({ error: 'Vendor name is required'});
   } 
 
   // This will only catch if someone is trying to inject sql, or some weirdo has a whacky vendor name
   if(!validateVendorName(vendorName)) {
-    return res.status(400).json({ error: 'Why are you trying to change the vendor name??', code: 'fuck off' })
+    return res.status(400).json({ error: 'Why are you trying to change the vendor name??'})
   }
   
   try {
     const exists: boolean = await userExists(vendorName);
     if (exists) {
-      return res.status(403).json({ error: `${vendorName} is already registered`, code: 'alreadyRegistered'})
+      return res.status(403).json({ error: `${vendorName} is already registered`})
     }
     
     // Salt(and (not actually)pepper) that hash(brown) baby
@@ -72,11 +72,10 @@ export async function register(req: Request, res: Response) {
     return res.status(200).json({
       message: 'User registered successfully',
       user: { email, vendorName },
-      code: 'success'
     });
   } catch(err: any) {
     console.log(`Error during registration: ${err.message}`);
-    return res.status(503).json({ error: 'Internal Server Error', code: 'database' });
+    return res.status(503).json({ error: 'Internal Server Error'});
   }  
 }
 
@@ -86,16 +85,16 @@ export async function login(req: Request, res: Response) {
 
   // Ensure that all parameters exist blah blah blah
   if(!email) {
-    return res.status(400).json({ error: 'Email is required', code: 'emailMissing' });
+    return res.status(400).json({ error: 'Email is required'});
   }
 
   // Catch injection/invalid
   if(!validateEmail(email)) {
-    return res.status(400).json({ error: 'Email contains invalid characters', code: 'emailInvalid' })
+    return res.status(400).json({ error: 'Email contains invalid characters'})
   }
 
   if(!password) {
-    return res.status(400).json({ error: 'Password is required', code: 'passwordMissing' });  
+    return res.status(400).json({ error: 'Password is required'});  
   }
   
   // Bleh
@@ -103,13 +102,13 @@ export async function login(req: Request, res: Response) {
     // God, i need to remember to (a)wait when im checking stuff
     const emailValid: boolean = await emailExists(email);
     if(!emailValid) {
-      return res.status(400).json({ error: 'Unknown Email or Password', code: 'invalidCredentials' })
+      return res.status(400).json({ error: 'Unknown Email or Password'})
     }
 
     // okay, now we can check the password
     const passwordValid: boolean = await checkPassword(email, password); 
     if (!passwordValid) {
-      return res.status(400).json({ error: 'Unknown Email or Password', code: 'invalidCredentials' })
+      return res.status(400).json({ error: 'Unknown Email or Password'})
     }
     
     // if we get to here, we now give user a valid session
@@ -121,11 +120,10 @@ export async function login(req: Request, res: Response) {
     return res.status(200).json({ 
       message: 'Logged in successfully',
       authToken: authToken,
-      code: 'success'
     })
 
   } catch(err: any) {
     console.log(`Error duing login: ${err.message}`)
-    return res.status(503).json({ error: 'Internal Server Error', code: 'database'})
+    return res.status(503).json({ error: 'Internal Server Error'});
   }
 }

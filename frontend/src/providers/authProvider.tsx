@@ -1,8 +1,6 @@
 // Types
 import type { ReactNode } from "react";
 import type { User } from "../models/user";
-import AuthError from "../models/authError";
-
 
 import { AuthContext } from "../contexts/authContext";
 import { useAuth } from "../hooks/useAuth";
@@ -34,15 +32,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // see in ProtectedRoutes.
     setLoading(true); 
 
-    const res = await axios.post(
+    await axios.post(
       `${apiURL}/auth/login`,
       { email, password, vendorName }
-    );
-
-    if(res.status !== 200) {
+    ).catch((err) => {
       setLoading(false);
-      throw new AuthError(res.data.error, res.data.code);
-    }
+      throw new Error(err.response.data.error);
+    });
+
     setLoading(false);
     navigate("/login");
   }
@@ -53,19 +50,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const res = await axios.post(
       `${apiURL}/auth/login`,
       { email, password }
-    ); 
-
-    if(res.status !== 200) {
+    ).catch((err) => {
       setLoading(false);
-      throw new AuthError(res.data.error, res.data.code);
-    }
+      throw new Error(err.response.data.error);
+    });
 
     setAuthToken(res.data.authToken);
     localStorage.setItem('authToken', res.data.authToken);
     setLoading(false);
-
-    // can navigate after this
-    navigate("/");
   }
 
   function logout() {

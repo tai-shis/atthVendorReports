@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router'
 import { AuthProvider, ProtectedRoutes } from './providers/authProvider'
+import UnprotectedRoutes from './pages/UnprotectedRoutes'
 
 // pages
 import Home from './pages/Home'
-import UnprotectedRoutes from './pages/UnprotectedRoutes'
+import Login from './pages/Login'
 import NoPage from './pages/NoPage'
 
 function App() {
@@ -13,8 +14,8 @@ function App() {
         <Routes>
           <Route element={<UnprotectedRoutes/>}>
             <Route path='/' element={<Home />} />
-            {/* <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} /> */}
+            <Route path='/login' element={<Login />} />
+            {/* <Route path='/register' element={<Register />} /> */}
           </Route>
           <Route path='/dashboard' element={<ProtectedRoutes/>}>
             {/* <Route path='/dashboard' element={<Dashboard />} /> */}
