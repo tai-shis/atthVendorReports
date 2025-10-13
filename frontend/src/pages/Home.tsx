@@ -4,7 +4,7 @@ export default function Home() {
   const { user } = useAuth();
 
   return (
-    <div className='h-full py-8'>
+    <div className='h-dvh py-8'>
       {user ? (
         <>
           <h1 className='text 6xl text-center font-normal m-6'>Welcome, {user.vendorName}</h1>
