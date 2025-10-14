@@ -12,7 +12,7 @@ export async function fetchUsers(req: Request, res: Response) {
 
   try {
     const users = await getUsers();
-    return res.status(200).json(users);
+    return res.status(200).json({ users });
   } catch (err: any) {
     console.log(`Error fetching users: ${err.message}`);
     return res.status(503).json({ error: 'Internal Server Error' });
@@ -28,7 +28,7 @@ export async function fetchVendors(req: Request, res: Response) {
 
   try {
     const vendors = await getVendors();
-    return res.status(200).json(vendors);
+    return res.status(200).json({ vendors});
   } catch (err: any) {
     console.log(`Error fetching vendors: ${err.message}`);
     return res.status(503).json({ error: 'Internal Server Error' });

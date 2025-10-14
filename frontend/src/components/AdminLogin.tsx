@@ -2,15 +2,20 @@ import { useId, useState } from 'react';
 
 const ADMIN_USERNAME = import.meta.env.VITE_ADMIN_USERNAME;
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
+const ADMIN_TOKEN = import.meta.env.VITE_ADMIN_TOKEN;
 
-export default function AdminLogin({ setIsAdmin }: { setIsAdmin: (isAdmin: boolean) => void }) {
+export default function AdminLogin({setIsAdmin, setAdminToken}: {
+  setIsAdmin: (isAdmin: boolean) => void, 
+  setAdminToken: (token: string) => void
+}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleAdminLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if(username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    if(username == ADMIN_USERNAME && password == ADMIN_PASSWORD) {
       setIsAdmin(true);
+      setAdminToken(ADMIN_TOKEN);
     } else {
       // Scare em off, ooooh so spooky
       alert("Invalid admin credentials. Alerting administrators.");

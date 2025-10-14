@@ -4,13 +4,14 @@ import { useAuth } from "../hooks/useAuth";
 export default function RegisterForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [vendorID, setVendorID] = useState("");
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
   const [error, setError] = useState<string>('');
   const { register } = useAuth();
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
-    await register(email, password, vendorID)
+    await register(email, password, id)
     .catch((err: Error) => {
       setError(err.message);
     });
@@ -18,9 +19,11 @@ export default function RegisterForm() {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const vendor = urlParams.get('vendor');
-    if (vendor) {
-      setVendorID(vendor);
+    const id = urlParams.get('id');
+    const name = urlParams.get('name');
+    if (id && name) {
+      setId(id);
+      setName(name)
     } else {
       setError('Please get a valid registration link');
     }
@@ -29,6 +32,18 @@ export default function RegisterForm() {
   return(
     <div className='border-2 border-white rounded-2xl bg-white p-4 w-[320px]'>
       <h2 className='text-4xl text-center mb-2 font-normal'>Register</h2>
+      <div>
+        <label htmlFor="name" className='text-2xl font-light' >Vendor Name:</label><br/>
+        <input 
+          type="text" 
+          id={useId()} 
+          name="name" 
+          placeholder="you shouldn't be seeing this!"
+          value={name}
+          disabled
+          className='border-2 border-gray-300 rounded-lg p-2 w-full mb-8'
+        />
+      </div>
       <div>
         <label htmlFor="email" className='text-2xl font-light' >Email:</label><br/>
         <input 

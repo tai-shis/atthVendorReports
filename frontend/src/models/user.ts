@@ -1,4 +1,6 @@
 export type User = {
+  id: string;
   email: string;
-  vendorName: string;
+  vendor_id: string;
+  vendor_name: string;
 };

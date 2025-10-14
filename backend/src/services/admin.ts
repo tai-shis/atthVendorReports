@@ -10,7 +10,7 @@ export function isAdmin(adminToken: string) {
 export async function getUsers(): Promise<string[]> {
   try {
     const res = await queryDB(
-      "SELECT u.id, u.email, u.vendor_id, v.name FROM users u JOIN vendor v ON (u.vendor_id = v.id)"
+      "SELECT u.id, u.email, u.vendor_id, v.name AS vendor_name FROM users u JOIN vendor v ON (u.vendor_id = v.id) ORDER BY v.name"
     );
     return res.rows;
   } catch (err: any) {

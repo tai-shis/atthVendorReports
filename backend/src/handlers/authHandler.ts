@@ -119,15 +119,14 @@ export async function login(req: Request, res: Response) {
     
     // if we get to here, we now give user a valid session
     // first, lets fetch the vendor name
-    const { id, vendorID, vendorName}: Partial<User> = await getUser(email);
-    const authToken: string = createToken(id!, email, vendorID!, vendorName!);
+    const { id, vendor_id, vendor_name}: Partial<User> = await getUser(email);
+    const authToken: string = createToken(id!, email, vendor_id!, vendor_name!);
 
     // boom, we all good baby
     return res.status(200).json({ 
       message: 'Logged in successfully',
       authToken: authToken,
     })
-
   } catch(err: any) {
     console.log(`Error duing login: ${err.message}`)
     return res.status(503).json({ error: 'Internal Server Error'});

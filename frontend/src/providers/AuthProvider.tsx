@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(true); 
 
     await axios.post(
-      `${apiURL}/auth/login`,
+      `${apiURL}/auth/register`,
       { email, password, vendor_id }
     ).catch((err) => {
       setLoading(false);
@@ -70,7 +70,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (authToken) {
       // for reference, jwt tokens are header.payload.signatore so index 1 gets us the user
-      setUser(JSON.parse(atob(authToken.split('.')[1])).vendorName);
+      setUser(JSON.parse(atob(authToken.split('.')[1])).sub);
+      console.log(user);
       setIsAuthenticated(true);
     } else {
       setUser(undefined);

@@ -1,17 +1,19 @@
 import AdminLogin from "../components/AdminLogin";
+import AdminDashboard from "../components/AdminDashboard";
 import { useState } from "react";
 
-
 export default function Admin() {
+  // true for testing
   const [isAdmin, setIsAdmin] = useState(false);
+  const [adminToken, setAdminToken] = useState('');
   
   return (
-    <div className='h-dvh py-16 flex flex-col items-center'>
+    <div className='h-dvh py-4 flex flex-col items-center'>
       {isAdmin 
       ?
-        <div className='text-2xl font-light'>Admin dashboard placeholder</div>
+        <AdminDashboard adminToken={adminToken} />
       :
-        <AdminLogin setIsAdmin={setIsAdmin}/>
+        <AdminLogin setIsAdmin={setIsAdmin} setAdminToken={setAdminToken}/>
       }
     </div>
   );
