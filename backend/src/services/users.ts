@@ -1,21 +1,9 @@
 import { compareSync } from 'bcrypt';
 import queryDB from '../models/database.js';
 
-export async function userExists(vendorName: string): Promise<boolean> {
-  try {
-    const res = await queryDB('SELECT 1 FROM users WHERE vendor_name=$1',[vendorName]);
+import type { User } from '../models/user.js';
 
-    if (res.rowCount === 0) {
-      return false;
-    } else { 
-      return true;
-    }
-  } catch(err: any) {
-    throw new Error(`Database error when fetching user: ${err.message}`);
-  }
-}
-
-export async function emailExists(email: string): Promise<boolean> {
+export async function userExists(email: string): Promise<boolean> {
   try {
     const res = await queryDB('SELECT 1 FROM users WHERE email=$1',[email]);
 
@@ -29,11 +17,10 @@ export async function emailExists(email: string): Promise<boolean> {
   }
 }
 
-
-export async function insertUser(email: string, hash: string, salt: string, vendorName: string): Promise<void> {
+export async function insertUser(id: string, email: string, hash: string, vendor_id: string): Promise<void> {
   // Should only be called if user does not exist already (USE THE ABOVE FUNCTION)
   try {
-    await queryDB('INSERT INTO users (email, hash, salt, vendor_name) VALUES ($1, $2, $3, $4)', [email, hash, salt, vendorName]);
+    await queryDB('INSERT INTO users (id, email, hash, vendor_id) VALUES ($1, $2, $3, $4)', [id, email, hash, vendor_id]);
   } catch(err: any) {
     throw new Error(`Database error when inserting user: ${err.message}`);
   }
@@ -48,21 +35,12 @@ export async function checkPassword(email: string, password: string): Promise<bo
   }
 }
 
-export async function getUser(email: string): Promise<string> {
+export async function getUser(email: string): Promise<Partial<User>> {
   // just returns the vendor name since the user doesnt have any other important info (needed here)
   try {
-    const res = await queryDB('SELECT vendor_name FROM users WHERE email=$1', [email]);
-    return res.rows[0].vendor_name;
+    const res = await queryDB('SELECT u.id, u.vendor_id, v.name FROM users u JOIN vendor v ON (u.vendor_id = v.id) WHERE email=$1', [email]);
+    return res.rows[0];
   } catch(err: any) {
     throw new Error(`Database error when fetching user ${err.message}`);
-  }
-}
-
-export async function getUsers(): Promise<string[]> {
-  try {
-    const res = await queryDB('SELECT * FROM users');
-    return res.rows;
-  } catch(err: any) {
-    throw new Error(`Database error when fetching users ${err.message}`);
   }
 }

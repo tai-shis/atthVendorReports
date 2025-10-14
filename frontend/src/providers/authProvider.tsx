@@ -27,14 +27,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Login provider
   // This function will be called in the frontend in a wrapper function that calls this one
   // wrapper function will handle catching, displaying errors, etc.
-  async function register(email: string, password: string, vendorName: string) {
+  async function register(email: string, password: string, vendor_id: string) {
     // when you are loading, we want to make sure not to pass authentication checks
     // see in ProtectedRoutes.
     setLoading(true); 
 
     await axios.post(
       `${apiURL}/auth/login`,
-      { email, password, vendorName }
+      { email, password, vendor_id }
     ).catch((err) => {
       setLoading(false);
       throw new Error(err.response.data.error);

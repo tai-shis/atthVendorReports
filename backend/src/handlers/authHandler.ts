@@ -1,11 +1,12 @@
 import { 
-  userExists, 
-  emailExists, 
+  userExists,
   insertUser, 
   checkPassword, 
   getUser 
 } from '../services/users.js';
+import { vendorExists } from '../services/vendors.js';
 import { createToken } from '../services/tokens.js'
+import { User } from '../models/user.js';
 
 import { genSaltSync, hashSync } from 'bcrypt';
 
@@ -18,16 +19,16 @@ function validateEmail(email: string): boolean {
 
 // theres probably a vuln for sql injection in vendorName but im laaaazyyyyyy 
 // (about 30 minutes before i wrote the below function)
-function validateVendorName(vendorName: string): boolean {
+function validateVendorID(vendor_id: string): boolean {
   // Haha bitches! I'm no longer lazy 
-  const vendorNamePattern: RegExp = /^[a-zA-Z0-9\[\]\{\}'&\/ _\-]+$/;
-  return vendorNamePattern.test(vendorName);
+  const vendorIDPattern: RegExp = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return vendorIDPattern.test(vendor_id);
 }
 
 export async function register(req: Request, res: Response) {
   const email: string | undefined = req.body.email;
   const password: string | undefined = req.body.password;
-  const vendorName: string | undefined = req.body.vendorName;
+  const vendor_id: string | undefined = req.body.vendor_id;
 
 
   // Ensure that all parameters exist blah blah blah
@@ -48,19 +49,23 @@ export async function register(req: Request, res: Response) {
     return res.status(400).json({ error: 'Password length is too short'})
   } 
   
-  if(!vendorName) {
+  if(!vendor_id) {
     return res.status(400).json({ error: 'Vendor name is required'});
   } 
 
-  // This will only catch if someone is trying to inject sql, or some weirdo has a whacky vendor name
-  if(!validateVendorName(vendorName)) {
-    return res.status(400).json({ error: 'Why are you trying to change the vendor name??'})
+  if(!validateVendorID(vendor_id)) {
+    return res.status(400).json({ error: 'doin something suspicious with the vendor id?'})
   }
   
   try {
-    const exists: boolean = await userExists(vendorName);
+    // This will only catch if someone is trying to inject sql, or is changing the vendor id
+    if(!vendorExists(vendor_id)) {
+      return res.status(400).json({ error: 'Vendor does not exist'})
+    }
+    
+    const exists: boolean = await userExists(email);
     if (exists) {
-      return res.status(403).json({ error: `${vendorName} is already registered`})
+      return res.status(403).json({ error: `${email} is already registered`})
     }
     
     // Salt(and (not actually)pepper) that hash(brown) baby
@@ -68,10 +73,11 @@ export async function register(req: Request, res: Response) {
     const hash = hashSync(password, salt);
 
     // TODO remove salt from store
-    await insertUser(email, hash, salt, vendorName);
+    const id = crypto.randomUUID();
+    await insertUser(id, email, hash, vendor_id);
     return res.status(200).json({
       message: 'User registered successfully',
-      user: { email, vendorName },
+      user: { email, vendor_id },
     });
   } catch(err: any) {
     console.log(`Error during registration: ${err.message}`);
@@ -100,7 +106,7 @@ export async function login(req: Request, res: Response) {
   // Bleh
   try {
     // God, i need to remember to (a)wait when im checking stuff
-    const emailValid: boolean = await emailExists(email);
+    const emailValid: boolean = await userExists(email);
     if(!emailValid) {
       return res.status(400).json({ error: 'Unknown Email or Password'})
     }
@@ -113,8 +119,8 @@ export async function login(req: Request, res: Response) {
     
     // if we get to here, we now give user a valid session
     // first, lets fetch the vendor name
-    const vendorName: string = await getUser(email);
-    const authToken: string = createToken(email, vendorName);
+    const { id, vendorID, vendorName}: Partial<User> = await getUser(email);
+    const authToken: string = createToken(id!, email, vendorID!, vendorName!);
 
     // boom, we all good baby
     return res.status(200).json({ 
