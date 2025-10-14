@@ -25,9 +25,14 @@ export async function fetchVendors(adminToken: string): Promise<Vendor[]> {
   });
   return res.data.vendors as Vendor[];
 }
-
-export function createVendor() {
-  // TODO: creates a new valid vendor in the database
+export async function createVendor(adminToken: string, vendor_name: string): Promise<void> {
+  await axios.post(
+    `${apiURL}/admin/create-vendor`,
+    { vendor_name },
+    { headers: { 'Authorization': adminToken } }
+  ).catch((err) => {
+    throw new Error(err.response.data.error);
+  });
 }
 
 

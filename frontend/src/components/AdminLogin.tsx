@@ -1,3 +1,5 @@
+// Its essentially a page, just not routed
+
 import { useId, useState } from 'react';
 
 const ADMIN_USERNAME = import.meta.env.VITE_ADMIN_USERNAME;

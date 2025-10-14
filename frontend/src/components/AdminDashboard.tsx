@@ -1,6 +1,8 @@
+// Its essentially a page, just not routed
+
 import AdminVendors from "./AdminVendors";
 import AdminUsers from "./AdminUsers";
-// import AdminOrders from "./AdminOrders";
+import AdminCreateVendor from "./AdminCreateVendor";
 
 export default function AdminDashboard({ adminToken }: { adminToken: string }) {
   return (
@@ -10,6 +12,7 @@ export default function AdminDashboard({ adminToken }: { adminToken: string }) {
         <AdminVendors adminToken={adminToken}/>
         <AdminUsers adminToken={adminToken}/>
       </div>
+      <AdminCreateVendor adminToken={adminToken} />
     </div>
   );
 }

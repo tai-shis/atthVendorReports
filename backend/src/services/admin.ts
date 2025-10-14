@@ -21,7 +21,7 @@ export async function getUsers(): Promise<string[]> {
 export async function getVendors(): Promise<string[]> {
   try {
     const res = await queryDB(
-      "SELECT * FROM vendor"
+      "SELECT * FROM vendor ORDER BY name"
     );
     return res.rows;
   } catch (err: any) {
@@ -29,13 +29,13 @@ export async function getVendors(): Promise<string[]> {
   }
 }
 
-export async function insertVendor(vendorName: string): Promise<void> {
+export async function insertVendor(vendor_name: string): Promise<void> {
   // Generate a UUID for the new vendor
   const id = crypto.randomUUID();
   try {
     await queryDB(
       "INSERT INTO vendor (id, name) VALUES ($1, $2)",
-      [id, vendorName]
+      [id, vendor_name]
     );
   } catch (err: any) {
     throw new Error(`Database error when inserting vendor ${err.message}`);

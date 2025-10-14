@@ -36,19 +36,19 @@ export async function fetchVendors(req: Request, res: Response) {
 }
 
 export async function createVendor(req: Request, res: Response) {
-  const vendorName = req.body.vendorName || '';
+  const vendor_name = req.body.vendor_name || '';
   const adminToken: string = req.get('Authorization') || '';
 
   if(!isAdmin(adminToken)) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  if (!vendorName) {
+  if (!vendor_name) {
     return res.status(400).json({ error: 'Vendor name is required' });
   }
 
   try {
-    await insertVendor(vendorName);
+    await insertVendor(vendor_name);
     return res.status(201).json({ message: 'Vendor created successfully' }); 
   } catch (err: any) {
     console.log(`Error creating vendor: ${err.message}`);

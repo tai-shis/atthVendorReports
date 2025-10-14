@@ -71,7 +71,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (authToken) {
       // for reference, jwt tokens are header.payload.signatore so index 1 gets us the user
       setUser(JSON.parse(atob(authToken.split('.')[1])).sub);
-      console.log(user);
       setIsAuthenticated(true);
     } else {
       setUser(undefined);
