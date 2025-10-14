@@ -71,10 +71,8 @@ export async function register(req: Request, res: Response) {
     // Salt(and (not actually)pepper) that hash(brown) baby
     const salt = genSaltSync(10);
     const hash = hashSync(password, salt);
-
-    // TODO remove salt from store
-    const id = crypto.randomUUID();
-    await insertUser(id, email, hash, vendor_id);
+    
+    await insertUser(email, hash, vendor_id);
     return res.status(200).json({
       message: 'User registered successfully',
       user: { email, vendor_id },
@@ -119,8 +117,8 @@ export async function login(req: Request, res: Response) {
     
     // if we get to here, we now give user a valid session
     // first, lets fetch the vendor name
-    const { id, vendor_id, vendor_name}: Partial<User> = await getUser(email);
-    const authToken: string = createToken(id!, email, vendor_id!, vendor_name!);
+    const user: User = await getUser(email);
+    const authToken: string = createToken(user);
 
     // boom, we all good baby
     return res.status(200).json({ 

@@ -1,5 +1,5 @@
 import queryDB from "../models/database.js";
-import crypto from "crypto";
+import { randomUUID } from "crypto";
 
 // essentially a simpler version of token system
 export function isAdmin(adminToken: string) {
@@ -31,7 +31,7 @@ export async function getVendors(): Promise<string[]> {
 
 export async function insertVendor(vendor_name: string): Promise<void> {
   // Generate a UUID for the new vendor
-  const id = crypto.randomUUID();
+  const id = randomUUID();
   try {
     await queryDB(
       "INSERT INTO vendor (id, name) VALUES ($1, $2)",
