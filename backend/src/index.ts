@@ -4,6 +4,7 @@ import cors from 'cors';
 
 import authRouter from './routes/authRouter.js';
 import adminRouter from './routes/adminRouter.js';
+import vendorRouter from './routes/vendorRouter.js';
 
 const PORT = process.env.SERVER_PORT || 8080
 const ORIGIN = process.env.WEB_ORIGIN;
@@ -18,6 +19,7 @@ app.use(express.json());
 
 app.use('/auth', authRouter);
 app.use('/admin', adminRouter);
+app.use('/vendor', vendorRouter); 
 
 app.get("/", (req: Request, res: Response) => { 
   res.send(`I finally fucking got it to work`);

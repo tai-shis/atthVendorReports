@@ -22,7 +22,13 @@ export async function getLastCall(): Promise<Date> {
       ORDER BY end_time 
       DESC LIMIT 1`, 
       ['success']);
-    // this table will never be empty
+    // this table should never be empty, but here
+    if (res.rowCount === 0) {
+      // offset to yesterday
+      const today = new Date();
+      return new Date(today.getTime() - 24 * 60 * 60 * 1000);
+    }
+
     return res.rows[0].end_time;
   } catch(err: any) {
     throw new Error(`Database error when fetching last call: ${err.message}`);
@@ -68,7 +74,7 @@ export async function searchOrders(lastCall: Date, callTime: Date) {
     });
 
     if (!res.orders) {
-      throw new Error('No response from Square API');
+      return [] as Order[];
     }
     
     // ugly ass parse
@@ -79,12 +85,16 @@ export async function searchOrders(lastCall: Date, callTime: Date) {
           continue;
         }
 
+        if(!item.grossSalesMoney.amount || !item.totalMoney.amount) {
+          continue;
+        }
+
         orders.push({
           id: order.id,
           item_id: item.uid,
           vendor_name: item.name,
-          gross_sales: Number(item.grossSalesMoney.amount),
-          total_sales: Number(item.totalMoney.amount),
+          gross_sales: item.grossSalesMoney.amount,
+          total_sales: item.totalMoney.amount,
           closed_at: new Date(order.closedAt),
         });
       }
@@ -114,9 +124,8 @@ export async function insertOrders(orders: Order[]): Promise<void> {
   try {
     for (const order of orders) {
       await queryDB(
-        `INSERT INTO orders(id, item_id, vendor_name, gross_sales, total_sales, closed_at, fetched_from, fetched_to)
-        VALUES($1, $2, $3, $4, $5, $6, $7, $8)
-        ON CONFLICT (id) DO NOTHING`,
+        `INSERT INTO orders(id, item_id, vendor_name, gross_sales, total_sales, closed_at)
+        VALUES($1, $2, $3, $4, $5, $6)`,
         [
           order.id,
           order.item_id,
