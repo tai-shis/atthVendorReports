@@ -8,7 +8,7 @@ const expiry: number = 3600; // 1 hour
 export function createToken(user: User): string {
   // Should be called with valid data
   const currentTime = Math.floor(Date.now() / 1000);
-  const payload: object = {
+  const payload = {
     sub: user,
     iat: currentTime,
     exp: currentTime + expiry,

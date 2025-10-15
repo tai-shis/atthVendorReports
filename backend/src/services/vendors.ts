@@ -19,8 +19,8 @@ export async function getLastCall(): Promise<Date> {
       SELECT end_time 
       FROM call_history 
       WHERE status = $1 
-      ORDER BY end_time 
-      DESC LIMIT 1`, 
+      ORDER BY end_time DESC 
+      LIMIT 1`, 
       ['success']);
     // this table should never be empty, but here
     if (res.rowCount === 0) {
@@ -140,3 +140,25 @@ export async function insertOrders(orders: Order[]): Promise<void> {
     throw new Error(`Database error when inserting orders: ${err.message}`);
   }
 }
+
+export async function getOrders(vendor_name: string, start_time: Date, end_time: Date, limit: number, sort_by: string): Promise<Order[]> {
+  try {
+    const res = await queryDB(
+      `SELECT * 
+       FROM orders 
+       WHERE 
+        vendor_name = $1 AND
+        closed_at >= $2::timestamptz AND
+        closed_at <= $3::timestamptz
+       ORDER BY closed_at ${sort_by}
+       LIMIT $4`,
+      [vendor_name, start_time.toISOString(), end_time.toISOString(), limit]
+    );
+    return res.rows;
+  } catch(err: any) {
+    throw new Error(`Database error when fetching orders: ${err.message}`);
+  }
+}
+
+
+// 

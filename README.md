@@ -13,14 +13,17 @@ direnv allow
 - [x] Redo Database Table Setup
 - [x] Refactor Register to account for id setup
 - [x] Admin panel to add valid vendors
+- [ ] Admin panel removing users and vendors
 - [ ] Get MVP up and running
+- [ ] test fetch orders
+ - [ ] implement simple frontend to call this
 
 ## MVP Requirements
 - [ ] **Just get a beta version working**
-- [ ] Set up order tables in the database
-- [ ] Pulling orders from square api
+- [x] Set up order tables in the database
+- [x] Pulling orders from square api
  - This will have to be all vendor orders
-- [ ] Compiling order data into the database\
+- [xx] Compiling order data into the database\
 - [ ] Vendor Dashboard
  - similar to square dashboard?
 - [ ] something else?
