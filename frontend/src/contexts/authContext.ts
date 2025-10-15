@@ -6,7 +6,7 @@ interface AuthContextData {
   isAuthenticated: boolean;
   authToken: string | undefined;
   loading: boolean;
-  register: (email: string, password: string, vendorID: string) => Promise<void>;
+  register: (email: string, password: string, vendor_id: string) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
 }

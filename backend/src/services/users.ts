@@ -40,7 +40,7 @@ export async function checkPassword(email: string, password: string): Promise<bo
 export async function getUser(email: string): Promise<User> {
   // just returns the vendor name since the user doesnt have any other important info (needed here)
   try {
-    const res = await queryDB('SELECT u.id, u.vendor_id, v.name AS vendor_name FROM users u JOIN vendor v ON (u.vendor_id = v.id) WHERE email=$1', [email]);
+    const res = await queryDB('SELECT u.id, u.email, u.vendor_id, v.name AS vendor_name FROM users u JOIN vendor v ON (u.vendor_id = v.id) WHERE email=$1', [email]);
     if (res.rowCount === 0) {
       throw new Error('User not found');
     }

@@ -1,13 +1,11 @@
 import { useId, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 
-import { useNavigate } from "react-router";
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string>('');
-  const { authToken, login } = useAuth();
-  const navigate = useNavigate();
+  const { login } = useAuth();
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -15,10 +13,6 @@ export default function LoginForm() {
     .catch((err: Error) => {
       setError(err.message);
     });
-
-    if (authToken) {
-      navigate('/');
-    }
   } 
     
   return(

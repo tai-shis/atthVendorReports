@@ -1,13 +1,15 @@
 import { BrowserRouter, Routes, Route } from 'react-router'
-import { AuthProvider, ProtectedRoutes } from './providers/AuthProvider'
-import UnprotectedRoutes from './pages/UnprotectedRoutes'
+import { AuthProvider } from './providers/AuthProvider'
+import ProtectedRoutes from './routes/ProtectedRoutes'
+import UnprotectedRoutes from './routes/UnprotectedRoutes'
 
 // pages
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
-
 import Admin from './pages/Admin'
+
+import Dashboard from './pages/Dashboard'
 import NoPage from './pages/NoPage'
 
 function App() {
@@ -22,8 +24,8 @@ function App() {
             
             <Route path='/admin' element={<Admin />} /> 
           </Route>
-          <Route path='/dashboard' element={<ProtectedRoutes/>}>
-            {/* <Route path='/dashboard' element={<Dashboard />} /> */}
+          <Route element={<ProtectedRoutes/>}>
+            <Route path='/dashboard' element={<Dashboard />} />
           </Route>
           <Route path='*' element={<NoPage/>} />
         </Routes>

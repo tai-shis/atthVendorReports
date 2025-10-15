@@ -1,12 +1,11 @@
 // Types
 import type { ReactNode } from "react";
-import type { User } from "../models/user";
+import { User } from "../models/user";
 
 import { AuthContext } from "../contexts/authContext";
-import { useAuth } from "../hooks/useAuth";
+
 import { useState, useEffect } from "react";
-import { Navigate, Outlet, useNavigate } from "react-router";
-import { Loader2Icon } from "lucide-react";
+import { useNavigate } from "react-router";
 import axios from 'axios';
 
 
@@ -16,11 +15,11 @@ const apiURL = import.meta.env.API_URL || 'http://localhost:8080';
 export function AuthProvider({ children }: { children: ReactNode }) {
   // We store and manage the auth token on local window storage
   const [authToken, setAuthToken] = useState<string | undefined>(
-    localStorage.getItem('authToken') ?? undefined
+    window.localStorage.getItem('authToken') ?? undefined
   );
 
   const [user, setUser] = useState<User | undefined>(undefined);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -47,7 +46,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function login(email: string, password: string) {
     setLoading(true);
 
-    const res = await axios.post(
+    const { 
+      data: { authToken } 
+    } = await axios.post<{authToken: string}>(
       `${apiURL}/auth/login`,
       { email, password }
     ).catch((err) => {
@@ -55,16 +56,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error(err.response.data.error);
     });
 
-    setAuthToken(res.data.authToken);
-    localStorage.setItem('authToken', res.data.authToken);
+    setAuthToken(authToken);
+    window.localStorage.setItem('authToken', authToken);
     setLoading(false);
+    navigate("/");
   }
 
   function logout() {
     setAuthToken(undefined);
-    localStorage.removeItem('authToken');
+    window.localStorage.removeItem('authToken');
     navigate("/");
   }
+
+  // why the fuck did this solve all of my problems
+  // useEffect(() => {
+  //   console.log(loading, isAuthenticated);
+  //   setLoading(false);
+  // }, [isAuthenticated]);
 
   // on change of authToken, we can store user info
   useEffect(() => {
@@ -80,11 +88,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // on load, check if we have a token in local storage
   useEffect(() => {
-    const authToken = localStorage.getItem('authToken');
+    setLoading(true);
+    const authToken = window.localStorage.getItem('authToken');
     if (authToken) {
       setAuthToken(authToken);
     }
+    setLoading(false);   
   }, []);
+
+
 
   return (
     <AuthContext.Provider
@@ -95,17 +107,3 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 } 
 
-export const ProtectedRoutes = () => {
-  const { isAuthenticated, loading } = useAuth();
-  if (loading) {
-    return (
-      <div className='flex justify-center w-screen h-screen items-center'>
-        <Loader2Icon className="w-10 h-10 animate-spin" />
-      </div>
-    );
-  } 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-  return <Outlet />;
-}
