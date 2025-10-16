@@ -25,8 +25,9 @@ export async function getLastCall(): Promise<Date> {
     // this table should never be empty, but here
     if (res.rowCount === 0) {
       // offset to yesterday
-      const today = new Date();
-      return new Date(today.getTime() - 24 * 60 * 60 * 1000);
+      // const today = new Date();
+      // return new Date(today.getTime() - 24 * 60 * 60 * 1000);
+      return new Date('2025-10-13T00:00:00Z');
     }
 
     return res.rows[0].end_time;
@@ -125,7 +126,8 @@ export async function insertOrders(orders: Order[]): Promise<void> {
     for (const order of orders) {
       await queryDB(
         `INSERT INTO orders(id, item_id, vendor_name, gross_sales, total_sales, closed_at)
-        VALUES($1, $2, $3, $4, $5, $6)`,
+        VALUES($1, $2, $3, $4, $5, $6)
+        ON CONFLICT (id, item_id) DO NOTHING`,
         [
           order.id,
           order.item_id,

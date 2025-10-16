@@ -65,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   function logout() {
     setAuthToken(undefined);
     window.localStorage.removeItem('authToken');
-    navigate("/");
+    navigate("/login");
   }
 
   // why the fuck did this solve all of my problems

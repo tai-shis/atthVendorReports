@@ -10,6 +10,10 @@ import Register from './pages/Register'
 import Admin from './pages/Admin'
 
 import Dashboard from './pages/Dashboard'
+import DashboardHome from './pages/DashboardHome'
+import DashboardOrders from './pages/DashboardOrders'
+import DashboardSettings from './pages/DashboardSettings' 
+
 import NoPage from './pages/NoPage'
 
 function App() {
@@ -25,7 +29,11 @@ function App() {
             <Route path='/admin' element={<Admin />} /> 
           </Route>
           <Route element={<ProtectedRoutes/>}>
-            <Route path='/dashboard' element={<Dashboard />} />
+            <Route path='/dashboard' element={<Dashboard />}>
+              <Route path='/dashboard/' element={<DashboardHome />} />
+              <Route path='/dashboard/orders' element={<DashboardOrders />} />
+              <Route path='/dashboard/settings' element={<DashboardSettings />} />
+            </Route>
           </Route>
           <Route path='*' element={<NoPage/>} />
         </Routes>

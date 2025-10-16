@@ -15,15 +15,15 @@ direnv allow
 - [x] Admin panel to add valid vendors
 - [ ] Admin panel removing users and vendors
 - [ ] Get MVP up and running
-- [ ] test fetch orders
- - [ ] implement simple frontend to call this
+- [x] test fetch orders
+ - [x] implement simple frontend to call this
 
 ## MVP Requirements
 - [ ] **Just get a beta version working**
 - [x] Set up order tables in the database
 - [x] Pulling orders from square api
  - This will have to be all vendor orders
-- [xx] Compiling order data into the database\
-- [ ] Vendor Dashboard
+- [x] Compiling order data into the database
+- [x] Vendor Dashboard
  - similar to square dashboard?
 - [ ] something else?
