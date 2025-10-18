@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fetchUsers } from "../services/admin";
 import { RefreshCw } from "lucide-react";
 
@@ -11,17 +11,19 @@ export default function AdminUsers({ adminToken }: { adminToken: string }) {
     await handleUsersFetch();
   }
 
-  async function handleUsersFetch() {
+  const handleUsersFetch = useCallback(async () => {
     try {
       setUsers(await fetchUsers(adminToken));
     } catch (err) {
       console.error("Error fetching users:", err);
     }
-  }
+  }, [adminToken]);
 
   useEffect(() => {
+    
+
     handleUsersFetch();
-  }, []);
+  }, [handleUsersFetch]);
 
   return(
     <div className="border border-white rounded-xl p-4 m-2 bg-white w-2/3 h-96">

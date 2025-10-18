@@ -75,14 +75,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // }, [isAuthenticated]);
 
   // on change of authToken, we can store user info
+  // for reference, jwt tokens are header.payload.signatore so index 1 gets us the user
   useEffect(() => {
-    if (authToken) {
-      // for reference, jwt tokens are header.payload.signatore so index 1 gets us the user
-      setUser(JSON.parse(atob(authToken.split('.')[1])).sub);
-      setIsAuthenticated(true);
-    } else {
+    if (!authToken) {
       setUser(undefined);
       setIsAuthenticated(false);
+    } else { // the token literally exists, we checked it
+      const payload = JSON.parse(atob(authToken.split('.')[1]))
+      if (payload.exp > Date.now()) { // make sure the token isnt expired
+        setUser(undefined);
+        setIsAuthenticated(false);
+      } else {   
+        setUser(payload.sub);
+        setIsAuthenticated(true);
+      } 
     }
   }, [authToken]);
 

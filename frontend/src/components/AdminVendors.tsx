@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { RefreshCw, Link } from "lucide-react";
 import { fetchVendors } from "../services/admin";
 
@@ -11,13 +11,13 @@ export default function AdminVendors({ adminToken }: { adminToken: string }) {
     await handleVendorsFetch();
   }
 
-  async function handleVendorsFetch() {
+  const handleVendorsFetch = useCallback(async () => {
     try {
       setVendors(await fetchVendors(adminToken));
     } catch(err) {
       console.error("Error fetching vendors:", err);
     }
-  }
+  }, [adminToken]);
 
   function copyRegistrationLink(vendor_name: string, vendor_id: string) {
     // create the link
@@ -28,7 +28,7 @@ export default function AdminVendors({ adminToken }: { adminToken: string }) {
   useEffect(() => {
     // Fetch vendors from API
     handleVendorsFetch();
-  }, []);
+  }, [handleVendorsFetch]);
 
   return (
     <div className="border border-white rounded-xl p-4 m-2 bg-white w-1/3 h-96">
